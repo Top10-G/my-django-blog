@@ -1,0 +1,56 @@
+{% extends 'base_layout.html' %}
+
+{% block page_title %} Edit Post {% endblock %}
+
+{% block logout %}
+  <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <div class="">
+        <button class="post-button" type="submit">Logout</button>
+      </div>
+    </form>
+{% endblock %}
+
+{% block page_heading%} Edit Post {% endblock %}
+
+{% block page_content%}
+  <form method="POST" action="" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div class="form-input">
+        <label for="title">Title</label>
+        <input value="{{ post.title }}" type="text" id="title" name="title" placeholder="Enter your title">
+      </div>
+
+      <div class="form-input">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" rows="10" placeholder="Enter your content">{{ post.content }}</textarea>
+      </div>
+
+      <div class="form-input">
+        <label for="upload">Upload</label>
+        <input type="file" name="image">
+      </div>
+
+      <div class="buttons">
+        <div class="post-button-container">
+          <div class="post-button">
+            <span><i class="fa-solid fa-arrow-left"></i></span>
+            <a href="{% url 'post_list' %}">Back</a>
+          </div>
+        </div>
+
+        <div class="post-button-container">
+          <div class="post-button">
+            <span><i class="fa-solid fa-paper-plane"></i></span>
+            <button class="update-button" type="submit">Update</button>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+{% endblock %}
+
+

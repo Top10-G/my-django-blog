@@ -1,0 +1,86 @@
+{% extends 'base_layout.html' %}
+
+{% block page_title %}
+  Sign Up
+{% endblock %}
+
+{% block page_heading %}
+  <h2>Sign Up</h2>
+{% endblock %}
+
+
+
+
+{% comment %} {% block page_content %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <pre>{{ form }}</pre>
+{% endblock %} {% endcomment %}
+
+
+
+{% block page_content %}
+  <form method="post" action=""> 
+
+      {% csrf_token %}
+
+      <div class="form-input">
+        <label class="title-test" >First Name</label>
+        <input type="text" id="firstname" name="first_name" placeholder="Enter your first name" value="{{signupform.first_name.value|default:""}}">
+        <p class="errorlist">
+          {{ signupform.first_name.errors }}
+        </p>
+      </div>
+
+      <div class="form-input">
+        <label class="title-test" >Last Name</label>
+        <input type="text" id="lastname" name="last_name" placeholder="Enter your last name" value="{{signupform.last_name.value|default:""}}">
+        <p class="errorlist">
+          {{ signupform.last_name.errors }}
+        </p>
+
+      <div class="form-input">
+        <label class="title-test" >Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" value="{{signupform.username.value|default:""}}">
+        <p class="errorlist">
+          {{ signupform.username.errors }}
+        </p>
+      </div>
+
+      <div class="form-input">
+        <label class="title-test" >Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{signupform.email.value|default:""}}">
+        <p class="errorlist">
+          {{ signupform.email.errors }}
+        </p>
+
+      <div class="form-input">
+        <label for="password1 ">Password</label>
+        <input type="password" id="password1" name="password1" rows="10" placeholder="Enter your password"></input> 
+        <p class="errorlist">
+          {{ signupform.password1.errors }}
+        </p>
+      </div>
+
+      <div class="form-input">
+        <label for="password2 ">Confirm Password</label>
+        <input type="password" id="password2" name="password2" rows="10" placeholder="Confirm your password"></input> 
+        <p class="errorlist">
+          {{ signupform.password2.errors }}
+        </p>
+      </div>
+      <div class="buttons">
+
+        <div class="post-button-container">
+          <div class="post-button">
+            <button class="new-post-page-button" type="submit">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <p>Already a member? <a href="{% url 'login' %}">Login</a></p>
+    </form>
+{% endblock %}

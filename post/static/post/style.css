@@ -1,0 +1,223 @@
+body {
+  font-family: Inter;
+  background-color: rgb(241, 239, 239);
+  font-size: 12px;
+}
+
+.container {
+  width: 80%;
+  margin-left:auto;
+  margin-right:auto;
+  padding: 30px;
+  /* border: 1px solid black; */
+}
+
+.new-post-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.new-post-button {
+  background-color: rgb(69, 17, 112);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
+
+.new-post-button a {
+  color: white;
+  text-decoration: none;
+}
+
+.heading {
+  background-color: rgb(69, 17, 112);
+  padding: 1em;
+  color: white;
+}
+
+.heading-title {
+  font-size:25px;
+  font-weight: bold;
+}
+
+.post{
+  padding: 1em;
+  margin: 1em 0;
+  background-color: white;
+}
+
+.title{
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(21, 51, 142);
+}
+
+/* .title a {
+  color: white;
+  text-decoration: none;
+} */
+
+.content{
+  font-size: 10px;
+}
+
+.icons {
+  color:rgb(21, 51, 142) ;
+  display: flex;
+  gap: 10px;
+}
+
+.post:hover {
+  background-color: rgb(173, 173, 173);
+  color: white;
+}
+
+.form-input {
+  width: 100%;
+  margin: 1em 0;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input input, textarea{
+  outline: none;
+  padding: 0.5em;
+  border: 0.2em;
+  margin-top: 0.2em;
+  border-radius: 0.2em;
+  font-size: 14px;
+  font-family: Inter;
+  background-color: white;
+}
+
+.new-heading {
+  background-color: rgb(69, 17, 112);
+  padding: 1em;
+  color: white;
+  border: 0.2em;
+  margin-top: 0.2em;
+  border-radius: 0.2em;
+}
+
+.post-button-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.post-button {
+  background-color: rgb(69, 17, 112);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post-button a {
+  color: white;
+  text-decoration: none;
+}
+
+
+/* this is for the buttons on create new post */
+.buttons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: rgb(21, 51, 142);
+  font-size: 12px;
+}
+
+
+.update-button{
+  background: none;
+  color: white;
+  border: none;
+  font-family: Inter;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.new-post-page-button{
+  background: none;
+  color: white;
+  border: none;
+  font-family: Inter;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* .choose-file{
+  border: rgb(21, 51, 142);
+  font-size: 12px;
+  background:  rgb(21, 51, 142);
+} */
+
+
+.post-with-image{
+  display: flex;
+  gap: 2em;
+  
+}
+.post-image{
+  width: 40vw;
+  height: max-content;
+  object-fit: cover;
+}
+
+.errorlist {
+  color: red;
+  font-size: 10px;
+  margin-top: 0.2em;
+  margin: 0;
+  padding: 0;
+}
+
+.errorlist li {
+  list-style-type: none;
+}
+
+
+.login-form {
+  width: 300px;
+  margin: 100px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  justify-content: center;
+}
+
+.login-button {
+  background-color: rgb(69, 17, 112);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding-top: 10px;
+}

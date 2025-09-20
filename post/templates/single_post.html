@@ -1,0 +1,49 @@
+{% extends 'base_layout.html' %}
+
+{% block page_title %}
+  single post
+{% endblock %}
+
+{% block logout %}
+  <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <div class="">
+        <button class="post-button" type="submit">Logout</button>
+      </div>
+    </form>
+{% endblock %}
+
+{% block page_content %}
+  <div class="post-with-image">
+       <div>
+      {% if singlepost.image %}
+          <img class="post-image" src="{{ singlepost.image.url }}" alt="{{ singlepost.title }}}" class="post-image">
+      {% endif %}
+      </div>
+
+      <div>
+        <article class="post-container">
+      <header class="post-header">
+        <h1 class="post-title">{{ singlepost.title }}</h1>
+      </header>
+      <hr>
+      <div class="post-content">
+        <p>{{ singlepost.content }}</p>
+      </div>
+
+    </article>
+      </div>
+    </div>
+    
+      <hr>
+    <div class="buttons">
+      <div class="post-button-container">
+        <div class="post-button">
+          <span><i class="fa-solid fa-arrow-left"></i></span>
+          <a href="{% url 'post_list' %}">Back</a>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+

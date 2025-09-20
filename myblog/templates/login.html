@@ -1,0 +1,43 @@
+{% extends "base_layout.html" %}
+
+{% block page_heading %}
+  <h2>Login</h2>
+{% endblock %}
+
+{% block page_content %}
+<form method="POST" action=""> 
+
+      {% csrf_token %}
+
+      <div class="form-input">
+        <label class="title-test" >Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" value="{{form.username.value|default:""}}" >
+        <p class="errorlist">
+          {{ form.username.errors }}
+        </p>
+      </div>
+
+      <div class="form-input">
+        <label for="password ">Password</label>
+        <input type="password" id="password" name="password" rows="10" placeholder="Enter your password"></input> 
+        <p class="errorlist">
+          {{ form.password.errors }}
+        </p>
+      </div>
+      
+
+      <div class="buttons">
+
+        <div class="post-button-container">
+          <div class="post-button">
+            <button class="new-post-page-button" type="submit">Login</button>
+          </div>
+        </div>
+
+      </div>
+
+      <p>Not a member yet? <a href="{% url 'signup' %}">Signup</a></p>
+
+    </form>
+{% endblock %}
+
