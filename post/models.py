@@ -17,9 +17,6 @@ class Post(models.Model):
   
   updated_at = models.DateTimeField(auto_now=True, null=True, blank=True) #this is for when you update a post
 
-
-  
-
   def __str__(self):
     return f"Title: {self.title}, Content: {self.content}"
 
