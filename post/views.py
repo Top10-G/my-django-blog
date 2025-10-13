@@ -93,39 +93,6 @@ def search_posts(request):
   })
 
 
-# @login_required
-# def search_posts(request):
-#   query = request.GET.get('q')
-#   results = []
-  
-#   if query:
-#     results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
-
-#   return render(request, 'search_results.html', {'allposts': results,'query': query})
-  # Note: 'allposts' is used in the template to refer to the search results, maintaining consistency with other templates.
-  # The 'query' variable is also passed to display the search term in the template.
-  
-  
-# @login_required
-# def like_post(request, post_id):
-#   """
-#   Toggle like for the logged-in user on the given post.
-#   """
-#   post = get_object_or_404(Post, id=post_id)
-#   user = request.user
-
-#   if user in post.likes.all():
-#       post.likes.remove(user)
-#   else:
-#       post.likes.add(user)
-
-#   # redirect back to previous page, fallback to single_post view
-#   referer = request.META.get('HTTP_REFERER')
-#   if referer:
-#     return redirect(referer)
-#   return redirect(reverse('single_post', args=[post_id]))
-
-
 @login_required
 def like_post(request, post_id):
   post = get_object_or_404(Post, id=post_id)
@@ -190,47 +157,6 @@ def profile_view(request, username):
     return render(request, 'profile.html', {'profile': profile, 'profile_user': user})
 
 
-# @login_required
-# def profile_view(request):
-#     """
-#     Show the current user's profile.
-#     """
-#     profile = getattr(request.user, 'profile', None)
-#     return render(request, 'profile.html', {'profile': profile})
-
-
-
-# @login_required
-# def edit_profile(request):
-#     """
-#     Edit the current user's profile (name, image, bio).
-#     """
-#     user = request.user
-#     profile = getattr(user, 'profile', None)
-
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=user)
-#         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
-
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user_form.save()
-#             profile_form.save()
-#             messages.success(request, "Profile updated successfully.")
-#             return redirect('profile')
-#         else:
-#             messages.error(request, "Please fix the errors below.")
-#     else:
-#         user_form = UserUpdateForm(instance=user)
-#         profile_form = ProfileForm(instance=profile)
-
-#     context = {
-#         'user_form': user_form,
-#         'profile_form': profile_form,
-#     }
-#     return render(request, 'edit_profile.html', context)
-
-
-
 
 @login_required
 def edit_profile(request):
@@ -254,28 +180,6 @@ def edit_profile(request):
     return render(request, 'edit_profile.html', context)
   
 
-# @login_required
-# def edit_profile(request):
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
-        
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user_form.save()
-#             profile_form.save()
-#             return redirect('profile')
-#     else:
-#         user_form = UserUpdateForm(instance=request.user)
-#         profile_form = ProfileForm(instance=request.user.profile)
-
-#     context = {
-#         'user_form': user_form,
-#         'profile_form': profile_form
-#     }
-
-#     return render(request, 'edit_profile.html', context)
-
-
 
 # ==========================================================================
 
@@ -295,18 +199,6 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
         messages.error(self.request, "Please correct the errors below.")
         return super().form_invalid(form)
 
-
-# class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
-#     template_name = 'change_password.html'
-#     success_url = reverse_lazy('profile')  # Redirect back to profile after success
-
-#     def form_valid(self, form):
-#         messages.success(self.request, "Your password was changed successfully.")
-#         return super().form_valid(form)
-
-#     def form_invalid(self, form):
-#         messages.error(self.request, "Please correct the errors below.")
-#         return super().form_invalid(form)
 
 
 # ===========================================================================
