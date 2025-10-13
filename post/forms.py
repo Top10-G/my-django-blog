@@ -84,19 +84,6 @@ class CommentForm(forms.ModelForm):
             }),
             'parent': forms.HiddenInput(),  # parent set via template if threading
         }
-        
-
-
-# class UserUpdateForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'email']  # change fields as you prefer
-
-# class ProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ['display_name', 'image', 'bio']
-
 
 
 class UserUpdateForm(forms.ModelForm):

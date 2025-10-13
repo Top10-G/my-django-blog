@@ -19,7 +19,7 @@ urlpatterns = [
 
   path('search/', search_posts, name='search'),
   
-  path('posts/<int:post_id>/like', like_post, name='like_post'),  # URL pattern for liking a post
+  path('posts/<int:post_id>/like', like_post, name='like_post'),  
   
   path('posts/<int:post_id>/comment/', add_comment, name='add_comment'),
   
