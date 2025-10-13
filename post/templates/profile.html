@@ -1,0 +1,50 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block page_title %}Profile | Château Gourmand{% endblock %}
+
+{% block page_content %}
+<section class="page-section profile-section">
+  <div class="container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar-container">
+          {% if profile.image %}
+            <img src="{{ profile.image.url }}" alt="Profile picture" class="profile-avatar">
+          {% else %}
+            <img src="{% static 'post/default-profile.png' %}" alt="Default profile" class="profile-avatar">
+          {% endif %}
+        </div>
+        <div class="profile-info">
+          <h1 class="profile-name">{{ request.user.username }}</h1>
+          <p class="profile-email">{{ request.user.email }}</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="profile-details">
+        <h2 class="section-title">Account Overview</h2>
+        <ul class="profile-list">
+          <li><strong>Username:</strong> {{ request.user.username }}</li>
+          <li><strong>Email:</strong> {{ request.user.email }}</li>
+          <li><strong>Member Since:</strong> {{ request.user.date_joined|date:"F d, Y" }}</li>
+        </ul>
+      </div>
+
+      <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="btn primary-btn">
+          ✏️ Edit Profile
+        </a>
+        <a href="{% url 'change_password' %}" class="btn secondary-btn">
+          🔐 Change Password
+        </a>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+          {% csrf_token %}
+          <button type="submit" class="btn danger-btn">🚪 Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

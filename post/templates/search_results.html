@@ -1,0 +1,121 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block page_title %}Search Results | Château Gourmand{% endblock %}
+
+{% block page_content %}
+<section class="search-results-section fade-in">
+  <div class="container">
+    
+    <!-- Search Header -->
+    <div class="search-header">
+      {% if query %}
+        <h1 class="search-title">
+          <i class="fas fa-search"></i> Search Results
+        </h1>
+        <p class="search-info">
+          {% if allposts %}
+            Found <span class="highlight-count">{{ allposts|length }}</span> 
+            result{{ allposts|length|pluralize }} for 
+            <span class="search-query-highlight">"{{ query }}"</span>
+          {% else %}
+            No results found for <span class="search-query-highlight">"{{ query }}"</span>
+          {% endif %}
+        </p>
+      {% else %}
+        <h1 class="search-title">
+          <i class="fas fa-search"></i> Search Posts
+        </h1>
+        <p class="search-info">Enter a search term to explore our culinary stories</p>
+      {% endif %}
+
+      <!-- Search Box in Results -->
+      <form class="search-box-large" method="get" action="{% url 'search' %}">
+        <input 
+          type="text" 
+          name="q" 
+          class="search-input-large" 
+          placeholder="Search for recipes, stories, experiences..." 
+          value="{{ query|default:'' }}"
+          autofocus
+        >
+        <button type="submit" class="search-submit-btn">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </form>
+    </div>
+
+    <!-- Results Grid -->
+    {% if allposts %}
+      <div class="search-results-grid">
+        {% for post in allposts %}
+        <article class="result-card">
+          
+          <!-- Image -->
+          {% if post.image %}
+          <div class="result-image-wrapper">
+            <a href="{% url 'single_post' post.id %}">
+              <img src="{{ post.image.url }}" alt="{{ post.title }}" class="result-image">
+              <div class="image-overlay">
+                <i class="fas fa-eye"></i>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+
+          <!-- Content -->
+          <div class="result-content">
+            <h2 class="result-title">
+              <a href="{% url 'single_post' post.id %}">{{ post.title }}</a>
+            </h2>
+            
+            <div class="result-meta">
+              <span class="meta-item">
+                <i class="fas fa-user"></i> {{ post.owner.username }}
+              </span>
+              <span class="meta-item">
+                <i class="fas fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}
+              </span>
+            </div>
+
+            <p class="result-excerpt">{{ post.content|truncatewords:30 }}</p>
+
+            <a href="{% url 'single_post' post.id %}" class="read-more-btn">
+              Read More <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+
+        </article>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      {% if query %}
+        <div class="no-results-card">
+          <div class="no-results-icon">
+            <i class="fas fa-search-minus"></i>
+          </div>
+          <h2>No Posts Found</h2>
+          <p>We couldn't find any posts matching <strong>"{{ query }}"</strong></p>
+          <div class="no-results-actions">
+            <a href="{% url 'post_list' %}" class="btn primary">
+              <i class="fas fa-utensils"></i> Browse All Posts
+            </a>
+            <button onclick="document.querySelector('.search-input-large').focus()" class="btn secondary">
+              <i class="fas fa-redo"></i> Try Another Search
+            </button>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="search-footer">
+      <a href="{% url 'post_list' %}" class="back-btn-large">
+        <i class="fas fa-arrow-left"></i> Back to All Posts
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

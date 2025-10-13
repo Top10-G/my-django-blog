@@ -1,49 +1,109 @@
 {% extends 'base_layout.html' %}
+{% load static %}
 
-{% block page_title %}
-  single post
-{% endblock %}
-
-{% block logout %}
-  <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <div class="">
-        <button class="post-button" type="submit">Logout</button>
-      </div>
-    </form>
-{% endblock %}
+{% block page_title %}{{ singlepost.title }} | Château Gourmand{% endblock %}
 
 {% block page_content %}
-  <div class="post-with-image">
-       <div>
-      {% if singlepost.image %}
-          <img class="post-image" src="{{ singlepost.image.url }}" alt="{{ singlepost.title }}}" class="post-image">
-      {% endif %}
-      </div>
-
-      <div>
-        <article class="post-container">
-      <header class="post-header">
-        <h1 class="post-title">{{ singlepost.title }}</h1>
-      </header>
-      <hr>
-      <div class="post-content">
-        <p>{{ singlepost.content }}</p>
-      </div>
-
-    </article>
-      </div>
-    </div>
+<section class="page-section fade-in">
+  <div class="container">
     
+    <!-- Back Button -->
+    <div class="mb-3">
+      <a href="{% url 'post_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Posts
+      </a>
+    </div>
+
+    <!-- Post Card -->
+    <div class="post-detail-simple">
+      
+      <!-- Image -->
+      {% if singlepost.image %}
+        <img src="{{ singlepost.image.url }}" alt="{{ singlepost.title }}" class="post-detail-image">
+      {% endif %}
+
+      <!-- Title -->
+      <h1 class="post-detail-title">{{ singlepost.title }}</h1>
+      
+      <!-- Meta -->
+      <div class="post-detail-meta">
+        <span>By <a href="{% url 'profile' singlepost.owner.username %}">{{ singlepost.owner.username }}</a></span>
+        <span>{{ singlepost.created_at|date:"F d, Y" }}</span>
+      </div>
+
       <hr>
-    <div class="buttons">
-      <div class="post-button-container">
-        <div class="post-button">
-          <span><i class="fa-solid fa-arrow-left"></i></span>
-          <a href="{% url 'post_list' %}">Back</a>
-        </div>
+
+      <!-- Content -->
+      <div class="post-detail-content">
+        {{ singlepost.content|linebreaksbr }}
+      </div>
+
+      <hr>
+
+      <!-- Actions -->
+      <div class="post-actions-simple">
+        {% if request.user.is_authenticated %}
+          <form method="post" action="{% url 'like_post' singlepost.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+              {% if request.user in singlepost.likes.all %}
+                ❤️ Liked
+              {% else %}
+                🤍 Like
+              {% endif %}
+              ({{ singlepost.likes.count }})
+            </button>
+          </form>
+
+          {% if request.user == singlepost.owner %}
+            <a href="{% url 'edit_post' singlepost.id %}" class="btn btn-secondary">Edit</a>
+            <form method="post" action="{% url 'delete_post' singlepost.id %}" style="display:inline;" 
+                  onsubmit="return confirm('Delete this post?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary">Delete</button>
+            </form>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
+
+    <!-- Comments -->
+    <div class="comments-simple mt-5">
+      <h3>💬 Comments ({{ singlepost.comments.count }})</h3>
+
+      {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'add_comment' singlepost.id %}" class="mb-4">
+          {% csrf_token %}
+          <textarea name="content" rows="4" class="form-textarea" placeholder="Share your thoughts..." required></textarea>
+          {{ form.parent }}
+          <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+        </form>
+      {% else %}
+        <p>
+          <a href="{% url 'login' %}?next={% url 'single_post' singlepost.id %}">Log in</a> to comment.
+        </p>
+      {% endif %}
+
+      <!-- Comment List -->
+      {% for comment in singlepost.comments.all %}
+        <div class="comment-simple">
+          <strong>{{ comment.user.username }}</strong>
+          <small>{{ comment.created_at|date:"F d, Y" }}</small>
+          
+          {% if request.user == comment.user or request.user == singlepost.owner %}
+            <form method="post" action="{% url 'delete_comment' comment.id %}" style="display:inline;" 
+                  onsubmit="return confirm('Delete comment?');">
+              {% csrf_token %}
+              <button type="submit" class="btn-link-danger">Delete</button>
+            </form>
+          {% endif %}
+          <p>{{ comment.content|linebreaksbr }}</p>
+        </div>
+      {% empty %}
+        <p class="text-muted">No comments yet. Be the first!</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
 {% endblock %}
-
-

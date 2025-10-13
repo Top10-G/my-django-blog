@@ -1,60 +1,139 @@
 {% extends 'base_layout.html' %}
+{% load static %}
 
-{% block page_title %} Create New Post {% endblock %}
+{% block page_title %}Create New Post | Château Gourmand{% endblock %}
 
-{% block logout %}
-  <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <div class="">
-        <button class="post-button" type="submit">Logout</button>
+{% block page_content %}
+<section class="create-post-section fade-in">
+  <div class="container">
+    <div class="create-post-card">
+      <!-- Header -->
+      <div class="create-post-header">
+        <h1 class="create-post-title">✍️ Create a New Post</h1>
+        <p class="create-post-subtitle">Share something delicious and inspiring with the Château Gourmand community.</p>
       </div>
-    </form>
+
+      <form method="POST" enctype="multipart/form-data" class="create-post-form">
+        {% csrf_token %}
+
+        <!-- Title Field -->
+        <div class="form-group">
+          <label for="title" class="form-label">
+            <i class="fas fa-heading"></i> Post Title
+          </label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-input" 
+            placeholder="e.g., My Grandmother's Secret Pasta Recipe" 
+            value="{{ form.title.value|default:'' }}"
+            required
+          >
+          {% if form.title.errors %}
+            <p class="error-message">
+              <i class="fas fa-exclamation-circle"></i> {{ form.title.errors.0 }}
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- Content Field -->
+        <div class="form-group">
+          <label for="content" class="form-label">
+            <i class="fas fa-align-left"></i> Content
+          </label>
+          <textarea 
+            id="content" 
+            name="content" 
+            rows="10" 
+            class="form-textarea" 
+            placeholder="Share your culinary story, recipe instructions, cooking tips, or food experiences..."
+            required
+          >{{ form.content.value|default:'' }}</textarea>
+          <div class="char-count">
+            <small><span id="charCount">0</span> characters</small>
+          </div>
+          {% if form.content.errors %}
+            <p class="error-message">
+              <i class="fas fa-exclamation-circle"></i> {{ form.content.errors.0 }}
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- Image Upload Field -->
+        <div class="form-group">
+          <label for="image" class="form-label">
+            <i class="fas fa-camera"></i> Featured Image <span class="optional-badge">Optional</span>
+          </label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="image" name="image" class="file-input" accept="image/*">
+            <label for="image" class="file-upload-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span class="file-upload-text">Choose an image or drag it here</span>
+              <span class="file-upload-hint">PNG, JPG, JPEG up to 5MB</span>
+            </label>
+            <div id="imagePreview" class="image-preview hidden"></div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <a href="{% url 'post_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Cancel
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Publish Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript for interactivity -->
+<script>
+  // Character counter
+  const contentTextarea = document.getElementById('content');
+  const charCount = document.getElementById('charCount');
+  
+  contentTextarea.addEventListener('input', () => {
+    charCount.textContent = contentTextarea.value.length;
+  });
+  
+  // Initialize count on page load
+  charCount.textContent = contentTextarea.value.length;
+
+  // Image preview
+  const imageInput = document.getElementById('image');
+  const imagePreview = document.getElementById('imagePreview');
+  const fileUploadText = document.querySelector('.file-upload-text');
+  
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        imagePreview.innerHTML = `
+          <img src="${e.target.result}" alt="Preview">
+          <button type="button" class="remove-preview" onclick="removeImage()">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        imagePreview.classList.remove('hidden');
+        fileUploadText.textContent = file.name;
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  function removeImage() {
+    imageInput.value = '';
+    imagePreview.classList.add('hidden');
+    imagePreview.innerHTML = '';
+    fileUploadText.textContent = 'Choose an image or drag it here';
+  }
+</script>
 {% endblock %}
-
-{% block page_heading%} Create New Post {% endblock %}
-
-{% block page_content%}
-  <form method="POST" action="" enctype="multipart/form-data"> 
-
-      {% csrf_token %}
-
-      <div class="form-input">
-        <label class="title-test" for="title">Title</label>
-        <input type="text" id="title" name="title" placeholder="Enter your title" value="{{form.title.value|default:""}}">
-        <p class="errorlist">
-          {{ form.title.errors }}
-        </p>
-      </div>
-
-      <div class="form-input">
-        <label for="content">Content</label>
-        <textarea id="content" name="content" rows="10" placeholder="Enter your content"></textarea>
-        <p class="errorlist">
-          {{ form.content.errors }}
-        </p>
-      </div>
-
-      <div class="form-input">
-        <label for="upload">Upload</label>
-        <input type="file" name="image">
-      </div>
-
-      <div class="buttons">
-        <div class="post-button-container">
-          <div class="post-button">
-            <span><i class="fa-solid fa-arrow-left"></i></span>
-            <a href="{% url 'post_list' %}">Back</a>
-          </div>
-        </div>
-
-        <div class="post-button-container">
-          <div class="post-button">
-            <span><i class="fa-solid fa-paper-plane"></i></span>
-            <button class="new-post-page-button" type="submit">Post</button>
-          </div>
-        </div>
-
-      </div>
-
-    </form>
-{%endblock%}

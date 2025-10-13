@@ -1,145 +1,74 @@
 {% extends 'base_layout.html' %}
+{% load static %}
 
-{% block page_title %}
-  Post list
-{% endblock %}
-
-{% block logout %}
-  <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <div class="">
-        <button class="post-button" type="submit">Logout</button>
-      </div>
-    </form>
-{% endblock %}
-
-{% block pre_heading %}
-  <div class="new-post-container">
-      <div class="new-post-button">
-        <span><i class="fa-solid fa-plus"></i></span>
-        <a href="{% url 'create_post' %}">Create new post</a>
-      </div>
-    </div>
-{% endblock %}
-
-{% block page_heading %}
-  <p class="heading-title">My Blog</p>
-  <p class="heading-description">A place to share my thoughts and ideas.</p>
-{% endblock %}
+{% block page_title %}Posts | Château Gourmand{% endblock %}
 
 {% block page_content %}
-
-  {% for post in allposts %}
-      <div class = "post">
-        <span class="title">
-          <a href="{% url 'single_post' post.id %}">{{post.title}}</a>
-        </span>
-        
-        <p class="content">{{post.content}}</p>
-        <hr>
-
-        <div class="icons">
-          <div>
-            <i class="fa-solid fa-thumbs-up"></i>
-          </div>
-
-          <div>
-            <a href="{% url 'edit_post' post.id %}"><i class="fa-solid fa-pencil"></i></a>
-          </div>
-          
-          <div>
-            <i class="fa-solid fa-comment"></i>
-          </div>
-
-          <div>
-            <form  method="POST" action="{% url 'delete_post' post.id %}">
-
-            {% csrf_token %}
-
-            <button class="delete-button" type="submit">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-
-          </form>
-          </div>
-        </div>
-      </div>
-    {% empty %}
-    <div>No posts available.</div>
-
-    {% endfor %}
-{% endblock %}
-
-
-
-{% comment %} <!DOCTYPE html>
-<html>
-  {% load static %}
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Post list</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{% static 'post/style.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div class="container">
-      <div class="new-post-container">
-        <div class="new-post-button">
-          <span><i class="fa-solid fa-plus"></i></span>
-          <a href="{% url 'create_post' %}">Create new post</a>
-        </div>
-      </div>
-
-      <div class="heading"> 
-        <p class="heading-title">My Blog</p>
-        <p class="heading-description">A place to share my thoughts and ideas.</p>
-      </div>
-
-    {% for post in allposts %}
-      <div class = "post">
-        <span class="title">
-          <a href="{% url 'single_post' post.id %}">{{post.title}}</a>
-        </span>
-        
-        <p class="content">{{post.content}}</p>
-        <hr>
-
-        <div class="icons">
-          <div>
-            <i class="fa-solid fa-thumbs-up"></i>
-          </div>
-
-          <div>
-            <a href="{% url 'edit_post' post.id %}"><i class="fa-solid fa-pencil"></i></a>
-          </div>
-          
-          <div>
-            <i class="fa-solid fa-comment"></i>
-          </div>
-
-          <div>
-            <form  method="POST" action="{% url 'delete_post' post.id %}">
-
-            {% csrf_token %}
-
-            <button class="delete-button" type="submit">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-
-          </form>
-          </div>
-        </div>
-      </div>
-    {% empty %}
-    <div>No posts available.</div>
-
-    {% endfor %}
+<section class="post-list-section fade-in">
+  <div class="container">
     
-  </body>
-</html> {% endcomment %}
+    <!-- Welcome Banner -->
+    {% if user.is_authenticated %}
+      <div class="welcome-banner">
+        <div class="welcome-content">
+          <h2 class="welcome-title">Hey, <span class="user-name">{{ user.username }}</span></h2>
+          
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Post List Header -->
+    <div class="post-list-header">
+      <h1 class="page-title">Latest Posts</h1>
+      {% if user.is_authenticated %}
+        <a href="{% url 'create_post' %}" class="btn primary">+ Create New Post</a>
+      {% endif %}
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="posts-grid">
+      {% for post in allposts %}
+
+      <article class="post-card">
+        
+        {% if post.image %}
+          <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+        {% endif %}
+
+        <h2 class="post-title"><a href="{% url 'single_post' post.id %}">{{ post.title }}</a></h2>
+        <p class="post-meta">By {{ post.owner.username }} • {{ post.created_at|date:"F j, Y" }}</p>
+        <p class="post-excerpt">{{ post.content|truncatewords:25 }}</p>
+        
+        
+        <div class="post-action">
+          <form method="post" action="{% url 'like_post' post.id %}">
+            {% csrf_token %}
+            <button class="icon-btn" type="submit"><i class="fa-solid fa-thumbs-up"></i><span class="like-count">{{ post.likes.count }}</span></button>
+          </form>
+
+          <a class="icon-btn" href="{% url 'single_post' post.id %}#comments"><i class="fa-solid fa-comment"></i> <span class="like-count">{{ post.comments.count }}</span></a>
+
+          {% if request.user == post.owner %}
+            <a class="icon-btn" href="{% url 'edit_post' post.id %}"><i class="fa-solid fa-pencil"></i></a>
+            
+            <form method="post" action="{% url 'delete_post' post.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button class="icon-btn" type="submit"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          {% endif %}
+        </div>
+
+      </article>
+      {% empty %}
+        <div class="no-posts-card">
+          <i class="fas fa-utensils"></i>
+          <p>No posts available yet.</p>
+          {% if user.is_authenticated %}
+            <a href="{% url 'create_post' %}" class="btn primary">Create the First Post</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

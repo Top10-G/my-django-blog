@@ -1,86 +1,67 @@
-{% extends 'base_layout.html' %}
+{% extends "base_layout.html" %}
 
-{% block page_title %}
-  Sign Up
-{% endblock %}
-
-{% block page_heading %}
-  <h2>Sign Up</h2>
-{% endblock %}
-
-
-
-
-{% comment %} {% block page_content %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-  </form>
-
-  <pre>{{ form }}</pre>
-{% endblock %} {% endcomment %}
-
-
+{% block page_title %}Sign Up | Château Gourmand{% endblock %}
 
 {% block page_content %}
-  <form method="post" action=""> 
+<section class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">Join the Table</h2>
+    <p class="auth-subtitle">Sign up to share and savor moments that matter.</p>
 
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" action="">
       {% csrf_token %}
 
-      <div class="form-input">
-        <label class="title-test" >First Name</label>
-        <input type="text" id="firstname" name="first_name" placeholder="Enter your first name" value="{{signupform.first_name.value|default:""}}">
-        <p class="errorlist">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" name="first_name" placeholder="Enter your first name" value="{{ signupform.first_name.value|default:'' }}">
           {{ signupform.first_name.errors }}
-        </p>
-      </div>
+        </div>
 
-      <div class="form-input">
-        <label class="title-test" >Last Name</label>
-        <input type="text" id="lastname" name="last_name" placeholder="Enter your last name" value="{{signupform.last_name.value|default:""}}">
-        <p class="errorlist">
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input type="text" id="lastname" name="last_name" placeholder="Enter your last name" value="{{ signupform.last_name.value|default:'' }}">
           {{ signupform.last_name.errors }}
-        </p>
-
-      <div class="form-input">
-        <label class="title-test" >Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" value="{{signupform.username.value|default:""}}">
-        <p class="errorlist">
-          {{ signupform.username.errors }}
-        </p>
-      </div>
-
-      <div class="form-input">
-        <label class="title-test" >Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{signupform.email.value|default:""}}">
-        <p class="errorlist">
-          {{ signupform.email.errors }}
-        </p>
-
-      <div class="form-input">
-        <label for="password1 ">Password</label>
-        <input type="password" id="password1" name="password1" rows="10" placeholder="Enter your password"></input> 
-        <p class="errorlist">
-          {{ signupform.password1.errors }}
-        </p>
-      </div>
-
-      <div class="form-input">
-        <label for="password2 ">Confirm Password</label>
-        <input type="password" id="password2" name="password2" rows="10" placeholder="Confirm your password"></input> 
-        <p class="errorlist">
-          {{ signupform.password2.errors }}
-        </p>
-      </div>
-      <div class="buttons">
-
-        <div class="post-button-container">
-          <div class="post-button">
-            <button class="new-post-page-button" type="submit">Sign Up</button>
-          </div>
         </div>
       </div>
-      <p>Already a member? <a href="{% url 'login' %}">Login</a></p>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" value="{{ signupform.username.value|default:'' }}">
+        {{ signupform.username.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ signupform.email.value|default:'' }}">
+        {{ signupform.email.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" id="password1" name="password1" placeholder="Enter your password">
+        {{ signupform.password1.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" id="password2" name="password2" placeholder="Confirm your password">
+        {{ signupform.password2.errors }}
+      </div>
+
+      <button type="submit" class="btn primary w-100"  style="justify-content: center;">Sign Up</button>
     </form>
+
+    <p class="auth-switch">
+      Already a member?
+      <a href="{% url 'login' %}" class="link-accent">Login here</a>
+    </p>
+  </div>
+</section>
 {% endblock %}

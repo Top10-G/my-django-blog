@@ -1,5 +1,6 @@
+from xml.etree.ElementTree import Comment
 from django import forms
-from.models import Post 
+from.models import Post, Comment, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 
@@ -69,3 +70,64 @@ class SignUpForm(UserCreationForm):
         if (last_name == ''):
             raise forms.ValidationError('Last name cannot be empty')
         return last_name
+    
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content', 'parent']   # include parent if you want replies
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'Write a comment...',
+                'class': 'comment-textarea'
+            }),
+            'parent': forms.HiddenInput(),  # parent set via template if threading
+        }
+        
+
+
+# class UserUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ['first_name', 'last_name', 'email']  # change fields as you prefer
+
+# class ProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = ['display_name', 'image', 'bio']
+
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # 👈 include username here
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter username'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter email'
+            }),
+        }
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['display_name', 'bio', 'image']
+        widgets = {
+            'display_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter display name'
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Write a short bio',
+                'rows': 4
+            }),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+

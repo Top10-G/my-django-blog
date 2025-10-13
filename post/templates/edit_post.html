@@ -1,56 +1,66 @@
 {% extends 'base_layout.html' %}
 
-{% block page_title %} Edit Post {% endblock %}
+{% block page_title %}Edit Post{% endblock %}
 
-{% block logout %}
-  <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <div class="">
-        <button class="post-button" type="submit">Logout</button>
-      </div>
-    </form>
-{% endblock %}
+{% block page_content %}
+<section class="page-section">
+  <div class="container form-container">
+    <h1 class="page-heading">Edit Post</h1>
+    <p class="page-subtext">Refine your thoughts, update your image, or polish your story.</p>
 
-{% block page_heading%} Edit Post {% endblock %}
-
-{% block page_content%}
-  <form method="POST" action="" enctype="multipart/form-data">
-
+    <form method="POST" enctype="multipart/form-data" class="styled-form">
       {% csrf_token %}
 
-      <div class="form-input">
-        <label for="title">Title</label>
-        <input value="{{ post.title }}" type="text" id="title" name="title" placeholder="Enter your title">
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title" class="form-label">Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-input" 
+          placeholder="Enter your title" 
+          value="{{ post.title }}" 
+          required
+        >
       </div>
 
-      <div class="form-input">
-        <label for="content">Content</label>
-        <textarea id="content" name="content" rows="10" placeholder="Enter your content">{{ post.content }}</textarea>
+      <!-- Content -->
+      <div class="form-group">
+        <label for="content" class="form-label">Content</label>
+        <textarea 
+          id="content" 
+          name="content" 
+          rows="8" 
+          class="form-input textarea" 
+          placeholder="Edit your content..."
+          required
+        >{{ post.content }}</textarea>
       </div>
 
-      <div class="form-input">
-        <label for="upload">Upload</label>
-        <input type="file" name="image">
-      </div>
-
-      <div class="buttons">
-        <div class="post-button-container">
-          <div class="post-button">
-            <span><i class="fa-solid fa-arrow-left"></i></span>
-            <a href="{% url 'post_list' %}">Back</a>
+      <!-- Image Upload -->
+      <div class="form-group">
+        <label for="image" class="form-label">Update Image (optional)</label>
+        {% if post.image %}
+          <div class="current-image-preview">
+            <img src="{{ post.image.url }}" alt="Current image for {{ post.title }}" class="image-preview">
+            <p class="image-note">Current image</p>
           </div>
-        </div>
-
-        <div class="post-button-container">
-          <div class="post-button">
-            <span><i class="fa-solid fa-paper-plane"></i></span>
-            <button class="update-button" type="submit">Update</button>
-          </div>
-        </div>
-
+        {% endif %}
+        <input type="file" id="image" name="image" class="form-file">
       </div>
 
+      <!-- Buttons -->
+      <div class="form-actions">
+        <a href="{% url 'post_list' %}" class="btn secondary-btn">
+          ← Back
+        </a>
+
+        <button type="submit" class="btn primary-btn">
+          💾 Save Changes
+        </button>
+      </div>
     </form>
+  </div>
+</section>
 {% endblock %}
-
-

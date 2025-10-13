@@ -1,20 +1,46 @@
-from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from post.forms import SignUpForm
-# from django.contrib.auth import login
-
 
 def signup(request):
-  form = None
-  if (request.method == "POST"): # if the request method is POST
-    form = SignUpForm(request.POST) 
-    print('signup test')
-    print(form.errors)
-    if (form.is_valid()):
-      print('checking for redirect 111')
-      form.save()
-      # user = form.save()
-      # login(request, user) This line is to log the user in automatically after signup
-      return redirect('login') # we redirect to the login page after successful signup
-  else:
-    form = SignUpForm()
-  return render(request, 'signup.html', {'signupform': form}) # we added 'signupform': form to be able to access the form in the template
+    # Clear any old messages on page load (GET request)
+    if request.method == 'GET':
+        storage = messages.get_messages(request)
+        storage.used = True  # Mark all messages as read/used
+        form = SignUpForm()
+    
+    # Handle form submission (POST request)
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account created successfully! You can now log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "Please correct the errors below.")
+
+    return render(request, 'signup.html', {'signupform': form})
+
+
+
+
+
+
+
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+# from post.forms import SignUpForm
+
+# def signup(request):
+#     if request.method == "POST":
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Account created successfully! You can now log in.")
+#             return redirect('login')
+#         else:
+#             messages.error(request, "Please correct the errors below.")
+#     else:
+#         form = SignUpForm()
+
+#     return render(request, 'signup.html', {'signupform': form})

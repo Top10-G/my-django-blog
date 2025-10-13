@@ -1,0 +1,125 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block page_title %}About | Château Gourmand{% endblock %}
+
+{% block page_content %}
+<section class="about-hero">
+  <div class="about-hero-overlay"></div>
+  <div class="about-hero-content fade-in">
+    <h1 class="about-hero-title">🍽 The Soul of Taste</h1>
+    <p class="about-hero-subtitle">A Table Where Stories and Flavors Meet</p>
+  </div>
+</section>
+
+<section class="about-content-section">
+  <div class="container">
+    <div class="about-content-card fade-in">
+      
+      <!-- Introduction -->
+      <div class="about-intro">
+        <p class="about-text lead">
+          Welcome to <span class="highlight">Château Gourmand</span> — not just a food blog, but a sensory journey.  
+          Here, we explore food the way we explore life: through <em>emotion</em>, <em>memory</em>, and <em>meaning</em>.
+        </p>
+
+        <p class="about-text">
+          Every dish has a story. Every flavor has a feeling.  
+          And every experience — from the first bite to the lingering aftertaste — is designed to connect us deeper with
+          culture, creativity, and community.
+        </p>
+      </div>
+
+      <hr class="elegant-divider">
+
+      <!-- Why This Blog Exists -->
+      <div class="about-section">
+        <div class="section-icon">💫</div>
+        <h3 class="section-heading">Why This Blog Exists</h3>
+        <p class="about-text">
+          I built this space to bring together two passions — <strong>brand experience design</strong> and
+          <strong>culinary storytelling</strong>.  
+          Because the way we experience a brand is not so different from the way we experience a meal:
+          both are about <em>emotion</em>, <em>texture</em>, and <em>memory</em>.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <i class="fas fa-heart"></i>
+            <p>Food that evokes emotion</p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-users"></i>
+            <p>Experiences that inspire connection</p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-lightbulb"></i>
+            <p>Stories that awaken curiosity</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="elegant-divider">
+
+      <!-- What You'll Find Here -->
+      <div class="about-section">
+        <div class="section-icon">✨</div>
+        <h3 class="section-heading">What You'll Find Here</h3>
+        
+        <div class="offerings-grid">
+          <div class="offering-card">
+            <div class="offering-icon">🍲</div>
+            <h4>Recipes with Heart</h4>
+            <p>Meals designed to tell stories, not just fill plates.</p>
+          </div>
+
+          <div class="offering-card">
+            <div class="offering-icon">📸</div>
+            <h4>Visual Experiences</h4>
+            <p>Photography that captures mood, not just color.</p>
+          </div>
+
+          <div class="offering-card">
+            <div class="offering-icon">📝</div>
+            <h4>Reflections on Taste</h4>
+            <p>How food, creativity, and identity intertwine.</p>
+          </div>
+
+          <div class="offering-card">
+            <div class="offering-icon">🌍</div>
+            <h4>Cultural Explorations</h4>
+            <p>How local flavors teach universal lessons.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="elegant-divider">
+
+      <!-- Promise -->
+      <div class="about-section promise-section">
+        <div class="section-icon">🤝</div>
+        <h3 class="section-heading">My Promise to You</h3>
+        <p class="about-text">
+          Whether you're a home cook, a food lover, or a creative soul — this blog will make you <em>feel seen</em>.  
+          I'll show you that taste can be thoughtful, and experience can be soulful.  
+          Because food is not just sustenance — it's a story worth telling beautifully.
+        </p>
+      </div>
+
+      <!-- Closing -->
+      <div class="about-closing">
+        <p class="closing-text">
+          <strong>Welcome to The Soul of Taste.</strong>
+        </p>
+        <p class="closing-subtext">
+          Pull up a chair — let's create something unforgettable together. 
+        </p>
+        <a href="{% url 'post_list' %}" class="btn btn-primary btn-large">
+          <i class="fas fa-utensils"></i> Explore Our Stories
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
