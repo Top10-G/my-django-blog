@@ -19,6 +19,10 @@ def post_list(request): #this is to fetch all post
   temp_var = {"allposts": posts} 
   return render(request, "post_list.html", temp_var) #note that the post_list here is not the function name... it is the name of the template that the posts are being sent to. when you check the templates folder, you will see an html file called post_list.html
 
+
+#==========================================================================
+
+
 @login_required
 def new_post(request):
   form = None # initialize form variable
@@ -26,6 +30,7 @@ def new_post(request):
     form = PostForm(request.POST, request.FILES) #request.FILES is for the image field
     if (form.is_valid()):
       post = form.save(commit=False) #commit=False is to prevent the form from being saved to the database immediately... don't save it yet, i want to add a user 
+      
       post.owner = request.user # this is to set the owner of the post to the currently logged in user
       post.save()
       return redirect("post_list")
@@ -36,6 +41,10 @@ def new_post(request):
   print(form['title'].value()) # to print the title value in the console if there is any
   print(form.errors) # to print the form errors in the console if there are any
   return render(request, "new_post.html", {'form': form}) # we added 'form': form to be able to access the form in the template
+
+
+#==========================================================================
+
 
 @login_required
 def edit_post(request, post_id):
@@ -54,6 +63,9 @@ def edit_post(request, post_id):
   return render(request, 'edit_post.html', {'form': form, 'post': post})
 
 
+#==========================================================================
+
+
 @login_required
 def delete_post(request, post_id):
   post = get_object_or_404(Post, id=post_id)
@@ -70,6 +82,9 @@ def delete_post(request, post_id):
   return render(request, 'post/confirm_delete_post.html', {'post': post})
 
 
+#==========================================================================
+
+
 @login_required
 def single_post(request, post_id):
   post = get_object_or_404(Post, id=post_id)
@@ -77,21 +92,24 @@ def single_post(request, post_id):
   return render(request, 'single_post.html', {'singlepost': post, 'form': form})
 
 
+#==========================================================================
 
 def search_posts(request):
   query = request.GET.get('q', '')
   results = []
   
   if query:
-      results = Post.objects.filter(
-          Q(title__icontains=query) | Q(content__icontains=query)
-      ).order_by('-created_at')
+    results = Post.objects.filter(
+      Q(title__icontains=query) | Q(content__icontains=query)
+    ).order_by('-created_at')
 
   return render(request, 'search_results.html', {
       'allposts': results,
       'query': query
   })
 
+
+#==========================================================================
 
 @login_required
 def like_post(request, post_id):
@@ -105,19 +123,21 @@ def like_post(request, post_id):
   return redirect('post_list')
 
 
+#==========================================================================
+
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.post = post
-            comment.save()
-            messages.success(request, "Comment posted.")
+          comment = form.save(commit=False)
+          comment.user = request.user
+          comment.post = post
+          comment.save()
+          messages.success(request, "Comment posted.")
         else:
-            messages.error(request, "Comment cannot be empty.")
+          messages.error(request, "Comment cannot be empty.")
     # redirect back to the post detail page
     referer = request.META.get('HTTP_REFERER')
     if referer:
@@ -125,11 +145,13 @@ def add_comment(request, post_id):
     return redirect('single_post', post_id=post.id)
 
 
+#==========================================================================
+
 @login_required
 def delete_comment(request, comment_id):
   comment = get_object_or_404(Comment, id=comment_id)
 
-    # 🛡️ Ownership check (comment owner or post owner)
+    #  Ownership check (comment owner or post owner)
   if request.user != comment.user and request.user != comment.post.owner:
     messages.error(request, "You are not allowed to delete this comment.")
     return redirect('single_post', post_id=comment.post.id)
@@ -156,6 +178,8 @@ def profile_view(request, username):
     profile = getattr(user, 'profile', None)
     return render(request, 'profile.html', {'profile': profile, 'profile_user': user})
 
+
+#==========================================================================
 
 
 @login_required
@@ -208,7 +232,8 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('post_list')  # take logged-in users to posts
     return render(request, 'home.html')
-  
+
+ 
 # ===========================================================================
 
 

@@ -1,4 +1,188 @@
 {% extends 'base_layout.html' %}
+{% load static %}
+
+{% block page_title %}Edit Post | Château Gourmand{% endblock %}
+
+{% block page_content %}
+<section class="create-post-section fade-in">
+  <div class="container">
+    <div class="create-post-card">
+      <!-- Header -->
+      <div class="create-post-header">
+        <h1 class="create-post-title">✏️ Edit Your Post</h1>
+        <p class="create-post-subtitle">Refine your thoughts, update your image, or polish your culinary story.</p>
+      </div>
+
+      <form method="POST" enctype="multipart/form-data" class="create-post-form">
+        {% csrf_token %}
+
+        <!-- Title Field -->
+        <div class="form-group">
+          <label for="title" class="form-label">
+            <i class="fas fa-heading"></i> Post Title
+          </label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-input" 
+            placeholder="e.g., My Grandmother's Secret Pasta Recipe" 
+            value="{{ post.title }}"
+            required
+          >
+          {% if form.title.errors %}
+            <p class="error-message">
+              <i class="fas fa-exclamation-circle"></i> {{ form.title.errors.0 }}
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- Content Field -->
+        <div class="form-group">
+          <label for="content" class="form-label">
+            <i class="fas fa-align-left"></i> Content
+          </label>
+          <textarea 
+            id="content" 
+            name="content" 
+            rows="10" 
+            class="form-textarea" 
+            placeholder="Share your culinary story, recipe instructions, cooking tips, or food experiences..."
+            required
+          >{{ post.content }}</textarea>
+          <div class="char-count">
+            <small><span id="charCount">0</span> characters</small>
+          </div>
+          {% if form.content.errors %}
+            <p class="error-message">
+              <i class="fas fa-exclamation-circle"></i> {{ form.content.errors.0 }}
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- Current Image Display -->
+        {% if post.image %}
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-image"></i> Current Image
+          </label>
+          <div class="current-image-container">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="current-image-preview">
+            <p class="image-note">This is your current featured image</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Image Upload Field -->
+        <div class="form-group">
+          <label for="image" class="form-label">
+            <i class="fas fa-camera"></i> Update Featured Image <span class="optional-badge">Optional</span>
+          </label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="image" name="image" class="file-input" accept="image/*">
+            <label for="image" class="file-upload-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span class="file-upload-text">Choose a new image or drag it here</span>
+              <span class="file-upload-hint">PNG, JPG, JPEG up to 5MB</span>
+            </label>
+            <div id="imagePreview" class="image-preview hidden"></div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <a href="{% url 'single_post' post.id %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Cancel
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript for interactivity -->
+<script>
+  // Character counter
+  const contentTextarea = document.getElementById('content');
+  const charCount = document.getElementById('charCount');
+  
+  contentTextarea.addEventListener('input', () => {
+    charCount.textContent = contentTextarea.value.length;
+  });
+  
+  // Initialize count on page load with existing content
+  charCount.textContent = contentTextarea.value.length;
+
+  // Image preview
+  const imageInput = document.getElementById('image');
+  const imagePreview = document.getElementById('imagePreview');
+  const fileUploadText = document.querySelector('.file-upload-text');
+  
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        imagePreview.innerHTML = `
+          <img src="${e.target.result}" alt="New preview">
+          <button type="button" class="remove-preview" onclick="removeImage()">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        imagePreview.classList.remove('hidden');
+        fileUploadText.textContent = file.name;
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  function removeImage() {
+    imageInput.value = '';
+    imagePreview.classList.add('hidden');
+    imagePreview.innerHTML = '';
+    fileUploadText.textContent = 'Choose a new image or drag it here';
+  }
+</script>
+
+<style>
+/* Additional styles for current image display */
+.current-image-container {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.current-image-preview {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.image-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+</style>
+{% endblock %}
+
+
+
+
+
+{% comment %} {% extends 'base_layout.html' %}
 
 {% block page_title %}Edit Post{% endblock %}
 
@@ -63,4 +247,4 @@
     </form>
   </div>
 </section>
-{% endblock %}
+{% endblock %} {% endcomment %}

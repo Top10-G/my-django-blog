@@ -55,8 +55,10 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
     parent = models.ForeignKey(
         'self',
         null=True,

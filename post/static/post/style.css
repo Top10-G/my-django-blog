@@ -1818,6 +1818,8 @@ button {
   transition: transform 0.3s ease;
 }
 
+
+
 .post-detail-image:hover {
   transform: scale(1.02);
 }

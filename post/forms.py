@@ -11,7 +11,6 @@ class PostForm(forms.ModelForm):
     title = forms.CharField(required=False) #this is to override the default behavior of the title field in the model to make it required
 
     content = forms.CharField(required=False) #this is to override the default behavior of the content field in the model to make it required
-
     
     
     class Meta:
@@ -19,13 +18,13 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content', 'image']
         
         
-    
     def clean_title(self):
     
         title = self.cleaned_data.get('title')
         if (title == ''):
             raise forms.ValidationError('Title cannot be empty')
         return title
+
 
     def clean_content(self):
         content = self.cleaned_data.get('content')
@@ -41,6 +40,10 @@ class PostForm(forms.ModelForm):
         if len(found_bad_words) > 0:
             raise forms.ValidationError(f'The content cannot contain inappropriate words: {',' .join(found_bad_words)}')
         return content
+    
+    
+#==========================================================================
+
     
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=False)
