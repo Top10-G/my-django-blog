@@ -39,10 +39,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['my-django-blog-x8h4.onrender.com', 'localhost', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://my-django-blog-x8h4.onrender.com']
+# CSRF_TRUSTED_ORIGINS = ['https://my-django-blog-x8h4.onrender.com']
 
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
 
 
 MEDIA_URL = '/media/'
